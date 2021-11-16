@@ -36,12 +36,6 @@ class AuthController extends Controller
 
     public function authorization(RegisterRequest $request)
     {
-        $validator = $request->validated();
-
-        if($validator->fails()){
-            return view('auth.register', ['errors' => $validator->errors()]);
-        }
-
         $new_user = User::create($request->all());
         $new_user->password = bcrypt($request->password);
         $new_user->email_verified_at = now();
