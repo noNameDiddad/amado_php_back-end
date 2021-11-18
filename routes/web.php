@@ -29,3 +29,6 @@ Route::get('/login', [AuthController::class, 'sign_in'] )->name('sign_in');
 Route::post('/login', [AuthController::class, 'login',] )->name('login');
 
 Route::get('/logout', [AuthController::class, 'logout',] )->name('logout');
+
+
+Route::resource('production', ProductController::class);
