@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [GeneralController::class, 'output',])->name('w');
+Route::get('/', [GeneralController::class, 'output',])->name('main');
 
 Route::get('/persona', function () {
     return view('user.persona');

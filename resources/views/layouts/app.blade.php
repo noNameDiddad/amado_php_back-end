@@ -8,10 +8,24 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <title>@yield('title')</title>
 </head>
 <body>
-    @yield('content')
+<header>
+    <div class="navbar navbar-dark bg-dark shadow-sm">
+        <div class="container">
+            <a href="{{ route('main') }}" class="navbar-brand d-flex align-items-center">
+                <strong>SHOP of Productions</strong>
+            </a>
+
+            @if(\Illuminate\Support\Facades\Request::path() != 'login' && \Illuminate\Support\Facades\Request::path() != 'register')
+                @include('includes.sign_panel')
+            @endif
+        </div>
+    </div>
+</header>
+@yield('content')
 </body>
 </html>
