@@ -39,18 +39,36 @@
                         </div>
                     @endforeach
                 </div>
-                @if($products->lastPage() > 1)
-                    @if($products->currentPage()> 1)
-                        <a href="{{ $products->links()->elements[0][$products->currentPage()-1] }}">Previous</a>
-                    @endif
-                    @for($i = 1; $i<$products->lastPage(); $i++)
-                        <a href="{{$products->links()->elements[0][$i]}}">{{ $i }}</a>
-                    @endfor
-                    @if($products->currentPage()< $products->lastPage())
-                        <a href="{{ $products->links()->elements[0][$products->currentPage()+1] }}">Next</a>
-                    @endif
+                <div class="pagination_upper text-center">
+                    <div class="pagination mt-5 m-auto">
+                        @if($products->lastPage() > 1)
+                            @if($products->currentPage()> 1)
+                                <a href="http://127.0.0.1:8000/production?page={{$products->currentPage()-1}}">
+                                    <button class="btn btn-outline-primary me-3">Previous</button>
+                                </a>
+                            @endif
 
-                @endif
+                            @foreach($products->links()->elements as $element)
+                                @if($element == "...")
+                                    <a href="">
+                                        <button class="btn btn-outline-info">...</button>
+                                    </a>
+                                @else
+                                    @foreach($element as $key => $page)
+                                        <a href="{{$page}}">
+                                            <button class="btn btn-outline-info">{{ $key }}</button>
+                                        </a>
+                                    @endforeach
+                                @endif
+                            @endforeach
+                            @if($products->currentPage()< $products->lastPage())
+                                <a href="http://127.0.0.1:8000/production?page={{$products->currentPage()+1}}">
+                                    <button class="btn btn-outline-primary ms-3">Next</button>
+                                </a>
+                            @endif
+                        @endif
+                    </div>
+                </div>
             </div>
         </div>
     </main>
