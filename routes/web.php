@@ -32,3 +32,5 @@ Route::get('/logout', [AuthController::class, 'logout',] )->name('logout');
 
 
 Route::resource('production', ProductController::class);
+
+Route::post('production', [ProductController::class, 'index'])->name('set-filter');

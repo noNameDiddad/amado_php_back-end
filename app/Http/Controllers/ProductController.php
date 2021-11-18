@@ -13,11 +13,35 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::orderBy('id','desc')->paginate(6);
+        if (isset($request->max_price)  || isset($request->category)) {
+            $max_price =  $request->max_price;
+            $category =  $request->category;
 
-        return view('production.index', ['products' => $products]);
+            $products = Product::with('categories')
+                ->where('category_id', $category)
+                ->where('price','<', $max_price)
+                ->orderBy('id','desc')
+                ->paginate(6);
+        }
+        else {
+            $products = Product::with('categories')->orderBy('id','desc')->paginate(6);
+        }
+        $categories = Category::all();
+
+        return view('production.index', ['products' => $products, 'categories' => $categories]);
+    }
+
+    public function filter()
+    {
+
+
+
+        session()->put('filtered_production', $products);
+
+
+        return redirect()->route('production.index');
     }
 
     /**
