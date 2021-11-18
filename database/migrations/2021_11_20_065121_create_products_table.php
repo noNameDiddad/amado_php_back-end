@@ -18,7 +18,8 @@ class CreateProductsTable extends Migration
             $table->string('product');
             $table->text('description');
             $table->string('number');
-            $table->string('price');
+            $table->integer('price');
+            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
             $table->timestamps();
         });
     }

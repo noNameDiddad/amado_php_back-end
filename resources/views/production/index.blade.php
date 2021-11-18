@@ -24,13 +24,13 @@
                                     <rect width="100%" height="100%" fill="#55595c"></rect>
                                     <text x="50%" y="50%" fill="#eceeef" dy=".3em">{{$product->product}}</text>
                                 </svg>
-
                                 <div class="card-body">
                                     <p class="card-text">{{$product->description}}</p>
-                                    <p class="card-text">{{$product->price}} руб.</p>
+                                    <p class="card-text"><b>Category:</b> {{$product->categories->category}}</p>
+                                    <p class="card-text text-decoration-underline">{{$product->price}} руб.</p>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="btn-group">
-                                            <button type="button" class="btn btn-sm btn-outline-secondary">Осмотреть
+                                            <button type="button" class="btn btn-sm btn-outline-secondary">More
                                             </button>
                                         </div>
                                     </div>
