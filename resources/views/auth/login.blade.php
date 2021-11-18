@@ -13,7 +13,7 @@
             @endif
             <form action="{{ route('login') }}" method="post">
                 @csrf
-                <h1 class="h3 mb-3 fw-normal">Вход</h1>
+                <h1 class="h3 mb-3 fw-normal">Sign In</h1>
 
                 <div class="form-floating">
                     <input type="email" class="form-control" name="email" id="floatingInput" placeholder="name@example.com">
@@ -21,17 +21,17 @@
                 </div>
 
                 <div class="form-floating">
-                    <input type="password" class="form-control" name="password" id="floatingPassword" placeholder="Пароль">
-                    <label for="floatingPassword">Пароль</label>
+                    <input type="password" class="form-control" name="password" id="floatingPassword" placeholder="Password">
+                    <label for="floatingPassword">Password</label>
                 </div>
 
                 <div class="checkbox mb-3">
                     <label>
-                        <input type="checkbox" name="remember" value="true"> Запомнить
+                        <input type="checkbox" name="remember" value="true"> Remember
                     </label>
                 </div>
-                <button class="w-100 btn btn-lg btn-primary mb-3" type="submit">Войти</button>
-                <a href="{{ route('register') }}" class="mt-3">Зарегестрироваться</a>
+                <button class="w-100 btn btn-lg btn-primary mb-3" type="submit">Sign In</button>
+                <a href="{{ route('register') }}" class="mt-3">Sign Up</a>
 
                 <p class="mt-5 mb-3 text-muted">© 2017–2021</p>
             </form>

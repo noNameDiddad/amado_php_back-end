@@ -1,17 +1,12 @@
 @extends('layouts.app')
-@section('title') Главная @endsection
-@section('sign_panel')
-    @if (Route::has('login'))
-
-    @endif
-@endsection
+@section('title') Main @endsection
 @section('content')
     <main>
 
         <section class="py-5 text-center container">
             <div class="row py-lg-5">
                 <div class="col-lg-6 col-md-8 mx-auto">
-                    <h1 class="fw-light">Album example</h1>
+                    <h1 class="fw-light">SHOP of Productions</h1>
                 </div>
             </div>
         </section>
@@ -28,13 +23,12 @@
                                     <rect width="100%" height="100%" fill="#55595c"></rect>
                                     <text x="50%" y="50%" fill="#eceeef" dy=".3em">{{$product->product}}</text>
                                 </svg>
-
                                 <div class="card-body">
                                     <p class="card-text">{{$product->description}}</p>
                                     <p class="card-text">{{$product->price}} руб.</p>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="btn-group">
-                                            <button type="button" class="btn btn-sm btn-outline-secondary">Осмотреть
+                                            <button type="button" class="btn btn-sm btn-outline-secondary">More
                                             </button>
                                         </div>
                                     </div>
@@ -44,11 +38,11 @@
                     @endforeach
                 </div>
                 <div class="text-center">
-                    <button type="button" class="btn btn-outline-dark mt-5">
-                        <a href="{{ route('production.index') }}" class="text-secondary text-decoration-none">
-                            <h2>Перейти к продукции</h2>
-                        </a>
-                    </button>
+                    <a href="{{ route('production.index') }}">
+                        <button type="button" class="btn btn-outline-secondary mt-5">
+                            <h2>To productions</h2>
+                        </button>
+                    </a>
                 </div>
             </div>
         </div>

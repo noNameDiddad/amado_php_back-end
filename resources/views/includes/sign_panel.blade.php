@@ -1,12 +1,26 @@
-<div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
+<div >
     @auth
-        <a href="{{ url('/logout') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Выйти</a>
+        <a href="{{ url('/logout') }}" class="text-secondary text-decoration-none">
+            <button type="button" class="btn btn-sm btn-outline-secondary">
+                Logout
+            </button>
+        </a>
+        <button type="button" class="btn btn-sm btn-outline-dark">
+            <a href="" class="text-secondary text-decoration-none"></a>
+        </button>
     @else
-        <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Войти</a>
+        <a href="{{ route('login') }}" class="text-secondary text-decoration-none">
+            <button type="button" class="btn btn-sm btn-outline-secondary">
+                Sign In
+            </button>
+        </a>
 
         @if (Route::has('register'))
-            <a href="{{ route('register') }}"
-               class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Зарегестрироваться</a>
+            <a href="{{ route('register') }}" class="text-secondary text-decoration-none">
+                <button type="button" class="btn btn-sm btn-outline-secondary">
+                    Sign Up
+                </button>
+            </a>
         @endif
     @endauth
 </div>

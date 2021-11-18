@@ -1,9 +1,6 @@
 @extends('layouts.app')
-@section('title') Продукция @endsection
-@section('sign_panel')
-@endsection
+@section('title') Production @endsection
 @section('content')
-    
     <main>
         <section class="py-5 text-center container">
             <div class="row py-lg-5">
