@@ -34,8 +34,8 @@
                 <input type="password" class="form-control" name="password_confirm" id="floatingPassword" placeholder="Подтверждение пароля">
                 <label for="floatingPassword">Confirm Password</label>
             </div>
-            <button class="w-100 btn btn-lg btn-primary mb-3" type="submit">Sign Up</button>
-            <a href="{{ route('login') }}" class="mt-3">Sign In</a>
+            <button class="w-100 btn btn-lg btn-dark mb-3" type="submit">Sign Up</button>
+            <a href="{{ route('login') }}" class="mt-3 text-dark">Sign In</a>
             <p class="mt-5 mb-3 text-muted">© 2017–2021</p>
         </form>
     </main>

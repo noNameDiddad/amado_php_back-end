@@ -38,7 +38,7 @@
                     @endforeach
                 </div>
                 <div class="text-center">
-                    <a href="{{ route('production.index') }}">
+                    <a href="{{ route('product.index') }}">
                         <button type="button" class="btn btn-outline-secondary mt-5">
                             <h2>To productions</h2>
                         </button>

@@ -30,8 +30,8 @@
                         <input type="checkbox" name="remember" value="true"> Remember
                     </label>
                 </div>
-                <button class="w-100 btn btn-lg btn-primary mb-3" type="submit">Sign In</button>
-                <a href="{{ route('register') }}" class="mt-3">Sign Up</a>
+                <button class="w-100 btn btn-lg btn-dark mb-3" type="submit">Sign In</button>
+                <a href="{{ route('register') }}" class="mt-3 text-dark">Sign Up</a>
 
                 <p class="mt-5 mb-3 text-muted">© 2017–2021</p>
             </form>

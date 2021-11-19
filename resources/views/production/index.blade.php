@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('title') Production @endsection
 @section('content')
+    {{--    \Illuminate\Support\Facades\Auth::user()->role--}}
     <main>
         <section class="py-5 text-center container">
             <div class="row py-lg-5">
@@ -9,6 +10,7 @@
                 </div>
             </div>
             <div>
+                {{--start filter--}}
                 <div class="mx-auto">
                     <h2 class="fw-light">Filter</h2>
                     <form action="{{ route('set-filter') }}" method="post">
@@ -16,16 +18,39 @@
                         <div class="row py-5">
                             <div class="col-4">
                                 <select name="category">
-                                    <option value="" disabled selected>Select category:</option>
-                                    @foreach($categories as $category)
-                                        <option value="{{ $category->id }}">{{ $category->category }}</option>
-                                    @endforeach
+                                    @if(isset($category_id))
+                                        <option value="">Select category:</option>
+                                        @foreach($categories as $category)
+                                            <option value="{{ $category->id }}"
+                                                    @if($category_id == $category->id) selected @endif>
+                                                {{ $category->category }}
+                                            </option>
+                                        @endforeach
+                                    @else
+                                        <option value="" selected>Select category:</option>
+                                        @foreach($categories as $category)
+                                            <option value="{{ $category->id }}">{{ $category->category }}</option>
+                                        @endforeach
+                                    @endif
                                 </select>
                             </div>
                             <div class="col-4">
-                                <label class="d-block min-price">Max price</label>
-                                <label class="d-block min-price" id="max-price">1000000 руб.</label>
-                                <input class="d-block m-auto" name="max_price" type="range" min="0" max="1000000" step="10" value="1000000">
+                                @if(isset($max_price))
+                                    <label class="d-block min-price">Max price</label>
+                                    <input class="d-block m-auto" name="max_price" type="range" min="0" max="1000000"
+                                           step="10" value="{{$max_price}}"
+                                           oninput="this.nextElementSibling.value = this.value">
+                                    <output class="d-inline min-price" id="max-price-val">{{$max_price}}</output>
+                                    <p class="d-inline"> руб.</p>
+                                @else
+                                    <label class="d-block min-price">Max price</label>
+                                    <input class="d-block m-auto" name="max_price" type="range" min="0" max="1000000"
+                                           step="10" value="1000000"
+                                           oninput="this.nextElementSibling.value = this.value">
+                                    <output class="d-inline min-price" id="max-price-val">1000000</output>
+                                    <p class="d-inline"> руб.</p>
+                                @endif
+
                             </div>
                             <div class="col-4"></div>
 
@@ -33,17 +58,23 @@
                         <button class="btn btn-sm btn-outline-secondary">Set filter</button>
                     </form>
 
-                    <a href="{{ route('production.index') }}">
+                    <a href="{{ route('product.index') }}">
                         <button class="btn btn-sm btn-outline-secondary mt-3">Drop filter</button>
                     </a>
 
                 </div>
+                {{--end filter--}}
             </div>
+        </section>
+        <section class="py-2 text-center bg-light">
+            <a href="{{ route('product.create') }}">
+                <button class="btn btn-outline-dark mt-5 w-25">Add product</button>
+            </a>
         </section>
         <div class="album py-5 bg-light">
             <div class="container">
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-
+                    {{--start productions--}}
                     @foreach($products as $product)
                         <div class="col">
                             <div class="card shadow-sm">
@@ -58,16 +89,38 @@
                                     <p class="card-text"><b>Category:</b> {{$product->categories->category}}</p>
                                     <p class="card-text text-decoration-underline">{{$product->price}} руб.</p>
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-sm btn-outline-secondary">More
-                                            </button>
+                                        <div class="btn-group row">
+                                            <div class="col-4">
+                                                <a href="{{ route('product.show', $product) }}">
+                                                    <button class="btn btn-outline-secondary ">More</button>
+                                                </a>
+                                            </div>
+
+                                            @if(\Illuminate\Support\Facades\Auth::user()->role == '1')
+                                                <div class="col-4">
+                                                    <a href="{{ route('product.edit', $product) }}">
+                                                        <button class="btn btn-outline-info ">Edit</button>
+                                                    </a>
+                                                </div>
+
+                                                <div class="col-4">
+                                                    <form action="{{ route('product.destroy', $product->id) }}" method="POST">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button class="btn btn-outline-danger">Delete</button>
+                                                    </form>
+                                                </div>
+
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     @endforeach
+                    {{--end productions--}}
                 </div>
+                {{--start pagination--}}
                 <div class="pagination_upper text-center">
                     <div class="pagination mt-5 m-auto">
                         @if($products->lastPage() > 1)
@@ -98,6 +151,7 @@
                         @endif
                     </div>
                 </div>
+                {{--end pagination--}}
             </div>
         </div>
     </main>
