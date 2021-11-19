@@ -15,33 +15,42 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
+        $categories = Category::all();
         if (isset($request->max_price)  || isset($request->category)) {
+
             $max_price =  $request->max_price;
             $category =  $request->category;
 
-            $products = Product::with('categories')
-                ->where('category_id', $category)
-                ->where('price','<', $max_price)
-                ->orderBy('id','desc')
-                ->paginate(6);
+            if ($category == null)
+            {
+                $products = Product::with('categories')
+                    ->where('price','<', $max_price)
+                    ->orderBy('id','desc')
+                    ->paginate(6);
+            }
+            else
+            {
+                $products = Product::with('categories')
+                    ->where('category_id', $category)
+                    ->where('price','<', $max_price)
+                    ->orderBy('id','desc')
+                    ->paginate(6);
+            }
+            return view('production.index', [
+                'products' => $products,
+                'categories' => $categories,
+                'max_price' => $max_price,
+                'category_id' => $category,
+                ]);
         }
         else {
             $products = Product::with('categories')->orderBy('id','desc')->paginate(6);
         }
-        $categories = Category::all();
 
-        return view('production.index', ['products' => $products, 'categories' => $categories]);
-    }
-
-    public function filter()
-    {
-
-
-
-        session()->put('filtered_production', $products);
-
-
-        return redirect()->route('production.index');
+        return view('production.index', [
+            'products' => $products,
+            'categories' => $categories
+        ]);
     }
 
     /**
@@ -51,7 +60,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        $categories = Category::all();
+        return view('production.create', ['categories' => $categories]);
     }
 
     /**
@@ -60,9 +70,18 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $redirect)
     {
-        //
+        if ($redirect) {
+            $product = Product::create($request->all());
+            $product->save();
+            return redirect()->route('product.index');
+        }else{
+            $product = Product::create($request->all());
+            $product->save();
+            return redirect()->back();
+        }
+
     }
 
     /**
@@ -107,6 +126,9 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+
+        $product->delete();
+
+        return redirect()->back();
     }
 }
