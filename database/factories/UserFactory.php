@@ -20,6 +20,7 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => bcrypt('654321'), // password
             'remember_token' => Str::random(10),
+            'role' => 0,
         ];
     }
 
