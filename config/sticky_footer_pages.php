@@ -1,1 +1,7 @@
-<?php return [ 'paths' => ['login','register','product/create','product/create','end']];
+<?php return [ 'paths' => [
+    'login',
+    'register',
+    'product/',
+    'persona',
+    'end'
+]];

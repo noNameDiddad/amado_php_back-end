@@ -32,7 +32,7 @@
 @yield('content')
 
 @foreach(config('sticky_footer_pages.paths') as $path)
-    @if(\Illuminate\Support\Facades\Request::path() == $path)
+    @if(str_contains(\Illuminate\Support\Facades\Request::path(), $path) )
         @include('includes.sticky_footer')
         @break
     @elseif($path == 'end')
