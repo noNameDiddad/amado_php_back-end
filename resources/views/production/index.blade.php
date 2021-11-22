@@ -85,7 +85,7 @@
                                     <text x="50%" y="50%" fill="#eceeef" dy=".3em">{{$product->product}}</text>
                                 </svg>
                                 <div class="card-body">
-                                    <p class="card-text">{{$product->description}}</p>
+                                    <p class="card-text">{{mb_strimwidth($product->description,0,150, '...')}}</p>
                                     <p class="card-text"><b>Category:</b> {{$product->categories->category}}</p>
                                     <p class="card-text text-decoration-underline">{{$product->price}} руб.</p>
                                     <div class="d-flex justify-content-between align-items-center">

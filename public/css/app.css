@@ -7,3 +7,6 @@
 .pagination {
     width: fit-content;
 }
+.product-show {
+    height: 70vh;
+}

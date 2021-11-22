@@ -11,51 +11,46 @@
                 </ul>
             </div>
         @endif
-        <form action="{{ route('product.store') }}" method="post">
+        <form action="{{ route('product.update',$product) }}" method="post">
             @csrf
+            @method('PATCH')
             <h1 class="h3 mb-3 fw-normal">Addition</h1>
 
             <div class="form-floating">
-                <input type="text" class="form-control" name="product" id="floatingInput" placeholder="Product">
+                <input type="text" class="form-control" name="product" id="floatingInput" value="{{ $product->product }}">
                 <label for="floatingInput">Product</label>
             </div>
             <div class="form-floating">
-                <input type="text" class="form-control" name="description" id="floatingInput" placeholder="Description">
+                <input type="text" class="form-control" name="description" id="floatingInput" value="{{ $product->description }}">
                 <label for="floatingInput">Description</label>
             </div>
             <div class="form-floating">
-                <input type="text" class="form-control" name="number" id="floatingInput" placeholder="Number">
+                <input type="text" class="form-control" name="number" id="floatingInput" value="{{ $product->number }}">
                 <label for="floatingInput">Number</label>
             </div>
             <div class="form-floating">
-                <input type="text" class="form-control" name="price" id="floatingInput" placeholder="Price">
+                <input type="text" class="form-control" name="price" id="floatingInput" value="{{ $product->price }}">
                 <label for="floatingInput">Price</label>
             </div>
 
             <div class="form-floating">
-                <select name="category">
-                    @if(isset($category_id))
-                        <option value="">Select category:</option>
-                        @foreach($categories as $category)
-                            <option value="{{ $category->id }}"
-                                    @if($category_id == $category->id) selected @endif>
-                                {{ $category->category }}
-                            </option>
-                        @endforeach
-                    @else
-                        <option value="" selected>Select category:</option>
-                        @foreach($categories as $category)
-                            <option value="{{ $category->id }}">{{ $category->category }}</option>
-                        @endforeach
-                    @endif
+                <select name="category_id" class="form-control" id="floatingInput" >
+                    <option value="">Select category:</option>
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}"
+                                @if($product->category_id == $category->id) selected @endif>
+                            {{ $category->category }}
+                        </option>
+                    @endforeach
                 </select>
                 <label for="floatingInput">Category</label>
             </div>
 
-            <button class="w-100 btn btn-lg btn-outline-dark mt-3" type="submit">Add</button>
-            <button class="w-100 btn btn-lg btn-outline-dark mt-3" type="submit">Add and go to Production</button>
+            <button class="w-100 btn btn-lg btn-outline-dark mt-3 mb-3" type="submit">Update</button>
         </form>
+            <a href="{{ url()->previous() }}">
+                <button class="w-100 btn btn-outline-secondary" type="button">Back</button>
+            </a>
     </main>
-    </div>
 
 @endsection
