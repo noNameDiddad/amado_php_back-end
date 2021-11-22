@@ -1,5 +1,10 @@
-<div >
+<div>
     @auth
+        <a href="{{ url('/persona') }}" class="text-secondary text-decoration-none">
+            <button type="button" class="btn btn-sm btn-outline-secondary">
+                Persona
+            </button>
+        </a>
         <a href="{{ url('/logout') }}" class="text-secondary text-decoration-none">
             <button type="button" class="btn btn-sm btn-outline-secondary">
                 Logout
@@ -14,7 +19,6 @@
                 Sign In
             </button>
         </a>
-
         @if (Route::has('register'))
             <a href="{{ route('register') }}" class="text-secondary text-decoration-none">
                 <button type="button" class="btn btn-sm btn-outline-secondary">

@@ -17,24 +17,21 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $categories = Category::all();
-        if (isset($request->max_price)  || isset($request->category)) {
+        if (isset($request->max_price) || isset($request->category)) {
 
-            $max_price =  $request->max_price;
-            $category =  $request->category;
+            $max_price = $request->max_price;
+            $category = $request->category;
 
-            if ($category == null)
-            {
+            if ($category == null) {
                 $products = Product::with('categories')
-                    ->where('price','<', $max_price)
-                    ->orderBy('id','desc')
+                    ->where('price', '<', $max_price)
+                    ->orderBy('id', 'desc')
                     ->paginate(6);
-            }
-            else
-            {
+            } else {
                 $products = Product::with('categories')
                     ->where('category_id', $category)
-                    ->where('price','<', $max_price)
-                    ->orderBy('id','desc')
+                    ->where('price', '<', $max_price)
+                    ->orderBy('id', 'desc')
                     ->paginate(6);
             }
             return view('production.index', [
@@ -42,10 +39,9 @@ class ProductController extends Controller
                 'categories' => $categories,
                 'max_price' => $max_price,
                 'category_id' => $category,
-                ]);
-        }
-        else {
-            $products = Product::with('categories')->orderBy('id','desc')->paginate(6);
+            ]);
+        } else {
+            $products = Product::with('categories')->orderBy('id', 'desc')->paginate(6);
         }
 
         return view('production.index', [
@@ -68,15 +64,15 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(ProductRequest $request)
     {
 //        if ($redirect) {
-            $product = Product::create($request->all());
-            $product->save();
-            return redirect()->route('product.index');
+        $product = Product::create($request->all());
+        $product->save();
+        return redirect()->route('product.index');
 //        }else{
 //            $product = Product::create($request->all());
 //            $product->save();
@@ -88,7 +84,7 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Product  $product
+     * @param \App\Models\Product $product
      * @return \Illuminate\Http\Response
      */
     public function show(Product $product)
@@ -100,7 +96,7 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Product  $product
+     * @param \App\Models\Product $product
      * @return \Illuminate\Http\Response
      */
     public function edit(Product $product)
@@ -112,8 +108,8 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Product  $product
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Product $product
      * @return \Illuminate\Http\Response
      */
     public function update(ProductRequest $request, Product $product)
@@ -125,7 +121,7 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Product  $product
+     * @param \App\Models\Product $product
      * @return \Illuminate\Http\Response
      */
     public function destroy(Product $product)

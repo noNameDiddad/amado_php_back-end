@@ -18,6 +18,6 @@ class ProductTableSeeder extends Seeder
     {
         Category::factory()->count(10)->create();
         Product::factory()->count(100)->create();
-        UserProduct::factory()->count(100)->create();
+        UserProduct::factory()->count(30)->create();
     }
 }

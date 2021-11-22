@@ -16,14 +16,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [GeneralController::class, 'output',])->name('main');
-
-
+Route::get('/', [GeneralController::class, 'showProduct',])->name('main');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/persona', function () {
-        return view('user.persona');
-    })->name('persona');
+    Route::get('/persona', [GeneralController::class, 'getPersona'])->name('persona');
 
     Route::resource('product', ProductController::class);
 
