@@ -78,16 +78,22 @@
                     @foreach($products as $product)
                         <div class="col">
                             <div class="card shadow-sm">
-                                <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-                                     xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
-                                     preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
-                                    <rect width="100%" height="100%" fill="#55595c"></rect>
-                                    <text x="50%" y="50%" fill="#eceeef" dy=".3em">{{$product->product}}</text>
-                                </svg>
+                                @if($product->image_path != "")
+                                    <img class="card-img-top product_image" src="{{ asset('storage/images/'.$product->image_path) }}" height="225" alt="">
+                                @else
+                                    <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
+                                         xmlns="http://www.w3.org/2000/svg" role="img"
+                                         aria-label="Placeholder: Thumbnail"
+                                         preserveAspectRatio="xMidYMid slice" focusable="false"><title>
+                                            Placeholder</title>
+                                        <rect width="100%" height="100%" fill="#55595c"></rect>
+                                    </svg>
+                                @endif
                                 <div class="card-body">
+                                    <h2 class="card-text">{{$product->product}}</h2>
                                     <p class="card-text">{{mb_strimwidth($product->description,0,150, '...')}}</p>
                                     <p class="card-text"><b>Category:</b> {{$product->categories->category}}</p>
-                                    <p class="card-text text-decoration-underline">{{$product->price}} руб.</p>
+                                    <p class="card-text text-decoration-underline">{{$product->price}}$</p>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="btn-group row">
                                             <div class="col-4">
@@ -96,7 +102,7 @@
                                                 </a>
                                             </div>
 
-                                            @if(\Illuminate\Support\Facades\Auth::user()->role == '1')
+                                            @if(Auth::user()->role == '1')
                                                 <div class="col-4">
                                                     <a href="{{ route('product.edit', $product) }}">
                                                         <button class="btn btn-outline-info ">Edit</button>
@@ -104,7 +110,8 @@
                                                 </div>
 
                                                 <div class="col-4">
-                                                    <form action="{{ route('product.destroy', $product->id) }}" method="POST">
+                                                    <form action="{{ route('product.destroy', $product->id) }}"
+                                                          method="POST">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button class="btn btn-outline-danger">Delete</button>

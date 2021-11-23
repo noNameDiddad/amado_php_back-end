@@ -11,7 +11,7 @@
                 </ul>
             </div>
         @endif
-        <form action="{{ route('product.update',$product) }}" method="post">
+        <form action="{{ route('product.update',$product) }}" method="post" enctype="multipart/form-data">
             @csrf
             @method('PATCH')
             <h1 class="h3 mb-3 fw-normal">Addition</h1>
@@ -30,6 +30,11 @@
             </div>
             <div class="form-floating">
                 <input type="text" class="form-control" name="price" id="floatingInput" value="{{ $product->price }}">
+                <label for="floatingInput">Price</label>
+            </div>
+
+            <div class="form-floating">
+                <input type="file" class="form-control" name="image" id="floatingInput">
                 <label for="floatingInput">Price</label>
             </div>
 

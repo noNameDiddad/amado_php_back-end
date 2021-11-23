@@ -25,7 +25,7 @@
                                 </svg>
                                 <div class="card-body">
                                     <p class="card-text">{{mb_strimwidth($product->description, 0, 150, '...')}}</p>
-                                    <p class="card-text">{{$product->price}} руб.</p>
+                                    <p class="card-text">{{$product->price}}$</p>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-sm btn-outline-secondary">More

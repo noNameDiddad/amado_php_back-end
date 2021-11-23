@@ -6,6 +6,7 @@ use App\Http\Requests\ProductRequest;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -69,15 +70,26 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
-//        if ($redirect) {
-        $product = Product::create($request->all());
+        $product = new Product();
+
+        $product->product = $request->product;
+        $product->description = $request->description;
+        $product->number = $request->number;
+        $product->price = $request->price;
+        $product->category_id = $request->category_id;
+
+        if($file = $request->file('image')){
+            $upload_folder = 'public/images';
+            $filename = $file->getClientOriginalName();
+
+            Storage::putFileAs($upload_folder, $file, $filename);
+
+            $product->image_path = $filename;
+        }
+
         $product->save();
+
         return redirect()->route('product.index');
-//        }else{
-//            $product = Product::create($request->all());
-//            $product->save();
-//            return redirect()->back();
-//        }
 
     }
 
@@ -114,7 +126,23 @@ class ProductController extends Controller
      */
     public function update(ProductRequest $request, Product $product)
     {
-        $product->update($request->all());
+        $product->product = $request->product;
+        $product->description = $request->description;
+        $product->number = $request->number;
+        $product->price = $request->price;
+        $product->category_id = $request->category_id;
+
+        if($file = $request->file('image')){
+            $upload_folder = 'public/images';
+            $filename = $file->getClientOriginalName();
+
+            Storage::putFileAs($upload_folder, $file, $filename);
+
+            $product->image_path = $filename;
+
+        }
+        $product->update();
+
         return redirect()->route('product.index');
     }
 

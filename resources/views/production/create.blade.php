@@ -2,7 +2,7 @@
 @section('title') Вход @endsection
 @section('content')
     <main class="form-center text-center">
-        <form action="{{ route('product.store') }}" method="post">
+        <form action="{{ route('product.store') }}" method="post" enctype="multipart/form-data">
             @csrf
             <h1 class="h3 mb-3 fw-normal">Addition</h1>
 
@@ -21,6 +21,11 @@
             <div class="form-floating">
                 <input type="text" class="form-control" name="price" id="floatingInput" value="{{ old('price') }}">
                 <label for="floatingInput">Price</label>
+            </div>
+
+            <div class="form-floating">
+                <input type="file" class="form-control" name="image" id="floatingInput">
+                <label for="floatingInput">Image</label>
             </div>
 
             <div class="form-floating">
