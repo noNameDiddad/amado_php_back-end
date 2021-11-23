@@ -10,7 +10,11 @@
                 </div>
             </div>
             <div>
+
+
                 {{--start filter--}}
+
+
                 <div class="mx-auto">
                     <h2 class="fw-light">Filter</h2>
                     <form action="{{ route('set-filter') }}" method="post">
@@ -50,10 +54,52 @@
                                     <output class="d-inline min-price" id="max-price-val">1000000</output>
                                     <p class="d-inline"> руб.</p>
                                 @endif
-
                             </div>
-                            <div class="col-4"></div>
+                            <div class="col-4">
+                                <p>Сортировка</p>
+                                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                    <input type="radio" class="btn-check" name="sort_by" id="sort_by1"
+                                           autocomplete="off"
+                                           @if($sort_by == 'product')
+                                           checked
+                                           @endif
+                                           value="product">
+                                    <label class="btn btn-outline-primary" for="sort_by1">По названию</label>
 
+                                    <input type="radio" class="btn-check" name="sort_by" id="sort_by2"
+                                           autocomplete="off"
+                                           @if($sort_by == 'created_at')
+                                           checked
+                                           @endif
+                                           value="created_at">
+                                    <label class="btn btn-outline-primary" for="sort_by2">По дате</label>
+
+                                    <input type="radio" class="btn-check" name="sort_by" id="sort_by3"
+                                           autocomplete="off"
+                                           @if($sort_by == 'price')
+                                           checked
+                                           @endif
+                                           value="price">
+                                    <label class="btn btn-outline-primary" for="sort_by3">По цене</label>
+                                </div>
+                                <div class="btn-group mt-3" role="group" aria-label="Basic radio toggle button group">
+                                    <input type="radio" class="btn-check" name="desc" id="desc1"
+                                           autocomplete="off"
+                                           @if($isDesc == 'desc')
+                                           checked
+                                           @endif
+                                           value="desc">
+                                    <label class="btn btn-outline-primary" for="desc1">По убыванию</label>
+
+                                    <input type="radio" class="btn-check" name="desc" id="desc2"
+                                           autocomplete="off"
+                                           @if($isDesc == 'asc' || $isDesc == null)
+                                           checked
+                                           @endif
+                                           value="asc">
+                                    <label class="btn btn-outline-primary" for="desc2">По возрастанию</label>
+                                </div>
+                            </div>
                         </div>
                         <button class="btn btn-sm btn-outline-secondary">Set filter</button>
                     </form>
@@ -63,7 +109,11 @@
                     </a>
 
                 </div>
+
+
                 {{--end filter--}}
+
+
             </div>
         </section>
         <section class="py-2 text-center bg-light">
@@ -73,13 +123,18 @@
         </section>
         <div class="album py-5 bg-light">
             <div class="container">
+
+
+                {{--start productions--}}
+
+
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                    {{--start productions--}}
                     @foreach($products as $product)
                         <div class="col">
                             <div class="card shadow-sm">
                                 @if($product->image_path != "")
-                                    <img class="card-img-top product_image" src="{{ asset('storage/images/'.$product->image_path) }}" height="225" alt="">
+                                    <img class="card-img-top product_image"
+                                         src="{{ asset('storage/images/'.$product->image_path) }}" height="225" alt="">
                                 @else
                                     <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
                                          xmlns="http://www.w3.org/2000/svg" role="img"
@@ -125,9 +180,14 @@
                             </div>
                         </div>
                     @endforeach
-                    {{--end productions--}}
                 </div>
+
+
+                {{--end productions--}}
+
+
                 {{--start pagination--}}
+
                 <div class="pagination_upper text-center">
                     <div class="pagination mt-5 m-auto">
                         @if($products->lastPage() > 1)
@@ -158,6 +218,8 @@
                         @endif
                     </div>
                 </div>
+
+
                 {{--end pagination--}}
             </div>
         </div>

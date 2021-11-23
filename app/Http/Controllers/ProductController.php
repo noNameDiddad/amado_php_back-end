@@ -17,38 +17,47 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
+        $max_price = $request->max_price;
+        $category_id = $request->category;
+        $isDesc = $request->desc;
+        $sort_by = 'id';
+        if (isset($request->sort_by)) {
+            $sort_by = $request->sort_by;
+        }
         $categories = Category::all();
         if (isset($request->max_price) || isset($request->category)) {
-
-            $max_price = $request->max_price;
-            $category = $request->category;
-
-            if ($category == null) {
-                $products = Product::with('categories')
-                    ->where('price', '<', $max_price)
-                    ->orderBy('id', 'desc')
-                    ->paginate(6);
-            } else {
-                $products = Product::with('categories')
-                    ->where('category_id', $category)
-                    ->where('price', '<', $max_price)
-                    ->orderBy('id', 'desc')
-                    ->paginate(6);
-            }
-            return view('production.index', [
-                'products' => $products,
-                'categories' => $categories,
-                'max_price' => $max_price,
-                'category_id' => $category,
-            ]);
+            $products = $this->filter($request, $isDesc, $sort_by);
         } else {
-            $products = Product::with('categories')->orderBy('id', 'desc')->paginate(6);
+            $products = Product::with('categories')->paginate(9);
         }
+        return view('production.index', compact(
+            'products',
+            'categories',
+            'max_price',
+            'category_id',
+            'sort_by',
+            'isDesc',
+        ));
+    }
 
-        return view('production.index', [
-            'products' => $products,
-            'categories' => $categories
-        ]);
+    public function filter($request, $isDesc, $sort_by)
+    {
+        $max_price = $request->max_price;
+        $category = $request->category;
+
+        if ($category == null) {
+            $products = Product::with('categories')
+                ->where('price', '<', $max_price)
+                ->orderBy($sort_by,$isDesc)
+                ->paginate(9);
+        } else {
+            $products = Product::with('categories')
+                ->where('category_id', $category)
+                ->where('price', '<', $max_price)
+                ->orderBy($sort_by,$isDesc)
+                ->paginate(9);
+        }
+        return $products;
     }
 
     /**
@@ -78,7 +87,7 @@ class ProductController extends Controller
         $product->price = $request->price;
         $product->category_id = $request->category_id;
 
-        if($file = $request->file('image')){
+        if ($file = $request->file('image')) {
             $upload_folder = 'public/images';
             $filename = $file->getClientOriginalName();
 
@@ -132,7 +141,7 @@ class ProductController extends Controller
         $product->price = $request->price;
         $product->category_id = $request->category_id;
 
-        if($file = $request->file('image')){
+        if ($file = $request->file('image')) {
             $upload_folder = 'public/images';
             $filename = $file->getClientOriginalName();
 
