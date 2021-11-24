@@ -20,17 +20,21 @@ Route::get('/', [GeneralController::class, 'showProduct',])->name('main');
 
 Route::middleware('auth')->group(function () {
     Route::get('/persona', [GeneralController::class, 'getPersona'])->name('persona');
+    Route::get('persona/admin', [UserController::class, 'showUsers'])->name('admin');
+    Route::post('persona/admin', [UserController::class, 'changeTable'])->name('change-table');
 
     Route::resource('product', ProductController::class);
 
     Route::post('product', [ProductController::class, 'index'])->name('set-filter');
     Route::post('product/store', [ProductController::class, 'store'])->name('product.store');
+
+
 });
 
-Route::get('/register', [AuthController::class, 'register',] )->name('reg');
-Route::post('/register', [AuthController::class, 'authorization',] )->name('register');
+Route::get('/register', [AuthController::class, 'register',])->name('reg');
+Route::post('/register', [AuthController::class, 'authorization',])->name('register');
 
-Route::get('/login', [AuthController::class, 'sign_in'] )->name('sign_in');
-Route::post('/login', [AuthController::class, 'login',] )->name('login');
+Route::get('/login', [AuthController::class, 'sign_in'])->name('sign_in');
+Route::post('/login', [AuthController::class, 'login',])->name('login');
 
-Route::get('/logout', [AuthController::class, 'logout',] )->name('logout');
+Route::get('/logout', [AuthController::class, 'logout',])->name('logout');
