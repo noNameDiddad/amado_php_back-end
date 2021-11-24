@@ -23,7 +23,6 @@
                         <a href="{{ url()->previous() }}">
                             <button class="btn btn-outline-secondary" type="button">Back</button>
                         </a>
-                        <form action="{{ route('product.to_user') }}"></form>
                     </div>
                 </div>
             </div>
