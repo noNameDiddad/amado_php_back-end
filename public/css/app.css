@@ -1,0 +1,16 @@
+.form-center {
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: auto;
+}
+.pagination {
+    width: fit-content;
+}
+.product-show {
+    height: 70vh;
+}
+
+.product_image {
+    object-fit: contain;
+}
