@@ -15,9 +15,17 @@
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <title>@yield('title')</title>
 </head>
-<body>
+<body class="pb-5">
 @include('includes.header')
 @yield('content')
-@include('includes.footer')
+@foreach(config('sticky_footer_pages.paths') as $path)
+    @if(str_contains(Request::path(), $path) )
+        @include('includes.sticky_footer')
+        @break
+    @elseif($path == 'end')
+        @include('includes.footer')
+        @break
+    @endif
+@endforeach
 </body>
 </html>

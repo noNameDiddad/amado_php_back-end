@@ -9,7 +9,7 @@
             user</p>
         @else
             admin</p>
-            <a href="{{ route('admin') }}">
+            <a href="/admin?table=user">
                 <button class="btn btn-outline-danger">To AdminPanel</button>
             </a>
         @endif

@@ -12,4 +12,8 @@ class Category extends Model
     protected $fillable = [
         'category',
     ];
+
+    protected $hidden  = [
+        'updated_at',
+    ];
 }
