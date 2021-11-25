@@ -3,7 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,11 +22,11 @@ Route::get('/', [GeneralController::class, 'showProduct',])->name('main');
 Route::middleware('auth')->group(function () {
     Route::get('/persona', [GeneralController::class, 'getPersona'])->name('persona');
 
-    Route::get('admin', [UserController::class, 'showAdmin'])->name('admin');
-    Route::get('admin/user', [UserController::class, 'showUsers'])->name('admin.user');
-    Route::get('admin/category', [UserController::class, 'showCategory'])->name('admin.category');
-    Route::get('admin/product', [UserController::class, 'showProduct'])->name('admin.product');
-    Route::post('admin', [UserController::class, 'setFields'])->name('set-fields');
+    Route::get('admin', [AdminController::class, 'showAdmin'])->name('admin');
+    Route::get('admin/user', [AdminController::class, 'showUsers'])->name('admin.user');
+    Route::get('admin/category', [AdminController::class, 'showCategory'])->name('admin.category');
+    Route::get('admin/product', [AdminController::class, 'showProduct'])->name('admin.product');
+    Route::post('admin', [AdminController::class, 'setFields'])->name('set-fields');
 
     Route::resource('product', ProductController::class);
 
