@@ -18,14 +18,5 @@
 <body>
 @include('includes.header')
 @yield('content')
-@foreach(config('sticky_footer_pages.paths') as $path)
-    @if(str_contains(\Illuminate\Support\Facades\Request::path(), $path) )
-        @include('includes.sticky_footer')
-        @break
-    @elseif($path == 'end')
-        @include('includes.footer')
-        @break
-    @endif
-@endforeach
 </body>
 </html>

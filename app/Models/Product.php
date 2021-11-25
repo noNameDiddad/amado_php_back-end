@@ -18,6 +18,10 @@ class Product extends Model
         'image_path',
     ];
 
+    protected $hidden  = [
+        'updated_at',
+    ];
+
     public function categories(){
         return $this->belongsTo(Category::class, 'category_id', 'id');
     }
