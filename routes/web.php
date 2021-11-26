@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [GeneralController::class, 'showProduct',])->name('main');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/persona', [GeneralController::class, 'getPersona'])->name('persona');
+    Route::get('/persona', [GeneralController::class, 'getPersonaData'])->name('persona');
 
     Route::get('admin', [AdminController::class, 'showAdmin'])->name('admin');
     Route::get('admin/user', [AdminController::class, 'showUsers'])->name('admin.user');
@@ -32,14 +32,15 @@ Route::middleware('auth')->group(function () {
 
     Route::post('product', [ProductController::class, 'index'])->name('set-filter');
     Route::post('product/store', [ProductController::class, 'store'])->name('product.store');
-
-
 });
 
-Route::get('/register', [AuthController::class, 'register',])->name('reg');
-Route::post('/register', [AuthController::class, 'authorization',])->name('register');
+Route::get('/register', [AuthController::class, 'sign_up',])->name('sign_up');
+Route::post('/register', [AuthController::class, 'register',])->name('register');
 
 Route::get('/login', [AuthController::class, 'sign_in'])->name('sign_in');
 Route::post('/login', [AuthController::class, 'login',])->name('login');
 
 Route::get('/logout', [AuthController::class, 'logout',])->name('logout');
+Route::get('/token', [GeneralController::class, 'showToken',])->name('dd');
+
+

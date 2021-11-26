@@ -29,6 +29,7 @@ class ProductController extends Controller
             $products = $this->filter($request, $isDesc, $sort_by);
         } else {
             $products = Product::with('categories')->paginate(9);
+            
         }
         return view('production.index', compact(
             'products',
@@ -97,7 +98,6 @@ class ProductController extends Controller
         }
 
         $product->save();
-
         return redirect()->route('product.index');
 
     }
@@ -148,7 +148,6 @@ class ProductController extends Controller
             Storage::putFileAs($upload_folder, $file, $filename);
 
             $product->image_path = $filename;
-
         }
         $product->update();
 
@@ -163,6 +162,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+
         $product->delete();
 
         return redirect()->back();

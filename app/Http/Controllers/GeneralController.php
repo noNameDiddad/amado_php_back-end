@@ -15,8 +15,13 @@ class GeneralController extends Controller
         return view('main', compact('products'));
     }
 
-    public function getPersona() {
+    public function getPersonaData() {
         $purchases = UserProduct::where('user_id', Auth::id())->get();
         return view('user.persona', compact('purchases'));
+    }
+
+    public function showToken()
+    {
+        return csrf_token();
     }
 }

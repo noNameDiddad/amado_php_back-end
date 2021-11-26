@@ -105,7 +105,6 @@ class AdminController extends Controller
             'description',
             'number',
             'price',
-            'category_id',
             'image_path',
             'created_at',
         ];
@@ -116,12 +115,15 @@ class AdminController extends Controller
     public function setFields(Request $request)
     {
         $fields = $request->all();
+
         unset($fields['_token']);
         unset($fields['show_category']);
         $show_category = "";
+
         if (isset($request->all()['show_category'])){
-            $show_category = "expand=category";
+            $show_category = "&expand=category";
         }
+
         if (empty($fields)){
             $url = explode('?', url()->previous());
             $page = explode('/admin', $url[0]);
@@ -134,7 +136,7 @@ class AdminController extends Controller
             $fields_string = substr($fields_string, 0, -1);
             $url = explode('?', url()->previous());
             $page = explode('/admin', $url[0]);
-            return redirect('/admin' . $page[1] . $fields_string.'&'.$show_category);
+            return redirect('/admin' . $page[1] . $fields_string.''.$show_category);
         }
 
     }
