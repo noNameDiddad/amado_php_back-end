@@ -14,7 +14,7 @@ class AdminController extends Controller
     public function showAdmin()
     {
         if (Auth::user()->role != 1) {
-            return response('Доступ с вашими правами запрещён', Response::HTTP_UNAUTHORIZED);
+            return response('Доступ с вашими правами запрещён', Response::HTTP_FORBIDDEN);
         }
         return view('admin.index');
     }
@@ -51,7 +51,7 @@ class AdminController extends Controller
     public function showCategory(Request $request)
     {
         if (Auth::user()->role != 1) {
-            return response('Доступ с вашими правами запрещён', Response::HTTP_UNAUTHORIZED);
+            return response('Доступ с вашими правами запрещён', Response::HTTP_FORBIDDEN);
         }
         $get_fields = [];
         $data = $request->query->all();
@@ -61,7 +61,7 @@ class AdminController extends Controller
                 $data_table = Category::select($get_fields)->paginate(20);
                 $data_table = $data_table->appends(['fields' => $data['fields']]);
             } catch (\Throwable $throwable) {
-                return response('Доступ с вашими правами запрещён', Response::HTTP_FORBIDDEN);
+                return response('Доступ с вашими правами запрещён', Response::HTTP_BAD_REQUEST);
             }
         } else {
             $data_table = Category::paginate(20);
@@ -77,7 +77,7 @@ class AdminController extends Controller
     public function showProduct(Request $request)
     {
         if (Auth::user()->role != 1) {
-            return response('', Response::HTTP_UNAUTHORIZED);
+            return response('Доступ с вашими правами запрещён', Response::HTTP_FORBIDDEN);
         }
         $get_fields = [];
         $show_category = false;
@@ -88,6 +88,8 @@ class AdminController extends Controller
                 array_push($get_fields, 'category_id');
                 $data_table = Product::select($get_fields)->paginate(20);
                 $data_table = $data_table->appends(['fields' => $data['fields']]);
+                if (isset($data['expand']))
+                    $data_table = $data_table->appends(['expand' => $data['expand']]);
             } catch (\Throwable $throwable) {
                 return response('Доступ с вашими правами запрещён', Response::HTTP_BAD_REQUEST);
             }
