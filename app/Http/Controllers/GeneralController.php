@@ -20,9 +20,4 @@ class GeneralController extends Controller
         $purchases = UserProduct::where('user_id', Auth::id())->get();
         return view('user.persona', compact('purchases'));
     }
-
-    public function showToken()
-    {
-        return csrf_token();
-    }
 }
