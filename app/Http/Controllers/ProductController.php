@@ -6,6 +6,7 @@ use App\Http\Requests\ProductRequest;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
@@ -29,6 +30,7 @@ class ProductController extends Controller
             $products = $this->filter($request, $isDesc, $sort_by);
         } else {
             $products = Product::with('categories')->paginate(9);
+
         }
         return view('production.index', compact(
             'products',
@@ -95,9 +97,9 @@ class ProductController extends Controller
 
             $product->image_path = $filename;
         }
-
+        Log::info("Product was created id=".$product->id);
+        Log::info($product);
         $product->save();
-
         return redirect()->route('product.index');
 
     }
@@ -148,7 +150,6 @@ class ProductController extends Controller
             Storage::putFileAs($upload_folder, $file, $filename);
 
             $product->image_path = $filename;
-
         }
         $product->update();
 
@@ -163,6 +164,8 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        Log::info("Product was deleted id=".$product->id);
+        Log::info($product);
         $product->delete();
 
         return redirect()->back();

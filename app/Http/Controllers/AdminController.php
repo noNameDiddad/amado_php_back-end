@@ -6,16 +6,24 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
 
 class AdminController extends Controller
 {
     public function showAdmin()
     {
+        if (Auth::user()->role != 1) {
+            return response('Доступ с вашими правами запрещён', Response::HTTP_FORBIDDEN);
+        }
         return view('admin.index');
     }
 
     public function showUsers(Request $request)
     {
+        if (Auth::user()->role != 1) {
+            return response('Доступ с вашими правами запрещён', Response::HTTP_UNAUTHORIZED);
+        }
         $get_fields = [];
         $data = $request->query->all();
         if (isset($data['fields'])) {
@@ -24,8 +32,7 @@ class AdminController extends Controller
                 $data_table = User::select($get_fields)->paginate(20);
                 $data_table = $data_table->appends(['fields' => $data['fields']]);
             } catch (\Throwable $throwable) {
-                $data_table = User::paginate(20);
-                return view('admin.user', compact('data_table', 'throwable'));
+                return response('Доступ с вашими правами запрещён', Response::HTTP_BAD_REQUEST);
             }
         } else {
             $data_table = User::paginate(20);
@@ -43,6 +50,9 @@ class AdminController extends Controller
 
     public function showCategory(Request $request)
     {
+        if (Auth::user()->role != 1) {
+            return response('Доступ с вашими правами запрещён', Response::HTTP_FORBIDDEN);
+        }
         $get_fields = [];
         $data = $request->query->all();
         if (isset($data['fields'])) {
@@ -51,8 +61,7 @@ class AdminController extends Controller
                 $data_table = Category::select($get_fields)->paginate(20);
                 $data_table = $data_table->appends(['fields' => $data['fields']]);
             } catch (\Throwable $throwable) {
-                $data_table = Category::paginate(20);
-                return view('admin.category', compact('data_table', 'throwable'));
+                return response('Доступ с вашими правами запрещён', Response::HTTP_BAD_REQUEST);
             }
         } else {
             $data_table = Category::paginate(20);
@@ -67,17 +76,22 @@ class AdminController extends Controller
 
     public function showProduct(Request $request)
     {
+        if (Auth::user()->role != 1) {
+            return response('Доступ с вашими правами запрещён', Response::HTTP_FORBIDDEN);
+        }
         $get_fields = [];
         $show_category = false;
         $data = $request->query->all();
         if (isset($data['fields'])) {
             try {
                 $get_fields = explode(',', $data['fields']);
+                array_push($get_fields, 'category_id');
                 $data_table = Product::select($get_fields)->paginate(20);
                 $data_table = $data_table->appends(['fields' => $data['fields']]);
+                if (isset($data['expand']))
+                    $data_table = $data_table->appends(['expand' => $data['expand']]);
             } catch (\Throwable $throwable) {
-                $data_table = Product::paginate(20);
-                return view('admin.category', compact('data_table', 'throwable'));
+                return response('Доступ с вашими правами запрещён', Response::HTTP_BAD_REQUEST);
             }
         } else {
             $data_table = Product::paginate(20);
@@ -93,7 +107,6 @@ class AdminController extends Controller
             'description',
             'number',
             'price',
-            'category_id',
             'image_path',
             'created_at',
         ];
@@ -104,12 +117,15 @@ class AdminController extends Controller
     public function setFields(Request $request)
     {
         $fields = $request->all();
+
         unset($fields['_token']);
         unset($fields['show_category']);
         $show_category = "";
+
         if (isset($request->all()['show_category'])){
-            $show_category = "expand=category";
+            $show_category = "&expand=category";
         }
+
         if (empty($fields)){
             $url = explode('?', url()->previous());
             $page = explode('/admin', $url[0]);
@@ -122,7 +138,7 @@ class AdminController extends Controller
             $fields_string = substr($fields_string, 0, -1);
             $url = explode('?', url()->previous());
             $page = explode('/admin', $url[0]);
-            return redirect('/admin' . $page[1] . $fields_string.'&'.$show_category);
+            return redirect('/admin' . $page[1] . $fields_string.''.$show_category);
         }
 
     }
