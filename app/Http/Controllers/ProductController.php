@@ -29,8 +29,9 @@ class ProductController extends Controller
         if (isset($request->max_price) || isset($request->category)) {
             $products = $this->filter($request, $isDesc, $sort_by);
         } else {
-            $products = Product::with('categories')->paginate(9);
-
+            $products = cache()->remember('product.index.without-filter', 60*60, function () {
+                return Product::with('categories')->paginate(9);
+            });
         }
         return view('production.index', compact(
             'products',
@@ -164,6 +165,8 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        cache()->forget('product.index.without-filter');
+        cache()->forget('product.main_pag');
         Log::info("Product was deleted id=".$product->id);
         Log::info($product);
         $product->delete();
