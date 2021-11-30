@@ -6,6 +6,8 @@ use App\Http\Requests\ProductRequest;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
@@ -28,7 +30,9 @@ class ProductController extends Controller
         if (isset($request->max_price) || isset($request->category)) {
             $products = $this->filter($request, $isDesc, $sort_by);
         } else {
-            $products = Product::with('categories')->paginate(9);
+            $products = cache()->remember('product.index.without-filter', 60*60, function () {
+                return Product::with('categories')->paginate(9);
+            });
         }
         return view('production.index', compact(
             'products',
@@ -91,13 +95,17 @@ class ProductController extends Controller
             $upload_folder = 'public/images';
             $filename = $file->getClientOriginalName();
 
-            Storage::putFileAs($upload_folder, $file, $filename);
+            if (Storage::exists("public/images/".$filename)) {
+                Storage::putFileAs($upload_folder, $file, $filename);
+            }
 
             $product->image_path = $filename;
         }
-
+        if (App::environment(['development','local'])) {
+            Log::info("Product was created id=".$product->id);
+            Log::info($product);
+        }
         $product->save();
-
         return redirect()->route('product.index');
 
     }
@@ -148,7 +156,10 @@ class ProductController extends Controller
             Storage::putFileAs($upload_folder, $file, $filename);
 
             $product->image_path = $filename;
-
+        }
+        if (App::environment(['development','local'])) {
+            Log::info("Product was updated id=".$product->id);
+            Log::info($product);
         }
         $product->update();
 
@@ -163,6 +174,12 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        cache()->forget('product.index.without-filter');
+        cache()->forget('product.main_pag');
+        if (App::environment(['development','local'])) {
+            Log::info("Product was deleted id=".$product->id);
+            Log::info($product);
+        }
         $product->delete();
 
         return redirect()->back();

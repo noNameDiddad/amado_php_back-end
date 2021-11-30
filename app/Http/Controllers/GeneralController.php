@@ -10,12 +10,13 @@ use Illuminate\Support\Facades\Auth;
 class GeneralController extends Controller
 {
     public function showProduct() {
-        $products = Product::orderBy('id','desc')->take(9)->get();
-
+        $products = cache()->remember('product.main_page', 60*60, function () {
+            return Product::orderBy('id','desc')->take(12)->get();
+        });
         return view('main', compact('products'));
     }
 
-    public function getPersona() {
+    public function getPersonaData() {
         $purchases = UserProduct::where('user_id', Auth::id())->get();
         return view('user.persona', compact('purchases'));
     }

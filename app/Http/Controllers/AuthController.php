@@ -29,12 +29,12 @@ class AuthController extends Controller
         return redirect()->route('login');
     }
 
-    public function register()
+    public function sign_up()
     {
         return view('auth.register');
     }
 
-    public function authorization(RegisterRequest $request)
+    public function register(RegisterRequest $request)
     {
         $new_user = User::create($request->all());
         $new_user->password = bcrypt($request->password);
