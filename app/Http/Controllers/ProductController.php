@@ -95,7 +95,9 @@ class ProductController extends Controller
             $upload_folder = 'public/images';
             $filename = $file->getClientOriginalName();
 
-            Storage::putFileAs($upload_folder, $file, $filename);
+            if (Storage::exists("public/images/".$filename)) {
+                Storage::putFileAs($upload_folder, $file, $filename);
+            }
 
             $product->image_path = $filename;
         }
