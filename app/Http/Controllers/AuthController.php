@@ -6,6 +6,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class AuthController extends Controller
@@ -37,7 +38,7 @@ class AuthController extends Controller
     public function register(RegisterRequest $request)
     {
         $new_user = User::create($request->all());
-        $new_user->password = bcrypt($request->password);
+        $new_user->password = Hash::make($request->password);
         $new_user->email_verified_at = now();
         $new_user->remember_token =  Str::random(10);
 

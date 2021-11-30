@@ -13,17 +13,15 @@ class AdminController extends Controller
 {
     public function showAdmin()
     {
-        if (Auth::user()->role != 1) {
-            return response('Доступ с вашими правами запрещён', Response::HTTP_FORBIDDEN);
-        }
+        if (Auth::user()->role != 1)
+            abort(Response::HTTP_FORBIDDEN);
         return view('admin.index');
     }
 
     public function showUsers(Request $request)
     {
-        if (Auth::user()->role != 1) {
-            return response('Доступ с вашими правами запрещён', Response::HTTP_UNAUTHORIZED);
-        }
+        if (Auth::user()->role != 1)
+            abort(Response::HTTP_FORBIDDEN);
         $get_fields = [];
         $data = $request->query->all();
         if (isset($data['fields'])) {
@@ -50,9 +48,8 @@ class AdminController extends Controller
 
     public function showCategory(Request $request)
     {
-        if (Auth::user()->role != 1) {
-            return response('Доступ с вашими правами запрещён', Response::HTTP_FORBIDDEN);
-        }
+        if (Auth::user()->role != 1)
+            abort(Response::HTTP_FORBIDDEN);
         $get_fields = [];
         $data = $request->query->all();
         if (isset($data['fields'])) {
@@ -76,9 +73,8 @@ class AdminController extends Controller
 
     public function showProduct(Request $request)
     {
-        if (Auth::user()->role != 1) {
-            return response('Доступ с вашими правами запрещён', Response::HTTP_FORBIDDEN);
-        }
+        if (Auth::user()->role != 1)
+            abort(Response::HTTP_FORBIDDEN);
         $get_fields = [];
         $show_category = false;
         $data = $request->query->all();
@@ -117,20 +113,17 @@ class AdminController extends Controller
     public function setFields(Request $request)
     {
         $fields = $request->all();
-
-        unset($fields['_token']);
-        unset($fields['show_category']);
+        unset($fields['_token'], $fields['show_category']);
         $show_category = "";
 
-        if (isset($request->all()['show_category'])){
+        if (isset($request->all()['show_category']))
             $show_category = "&expand=category";
-        }
 
-        if (empty($fields)){
+        if (empty($fields)) {
             $url = explode('?', url()->previous());
             $page = explode('/admin', $url[0]);
-            return redirect('/admin' . $page[1].'?'.$show_category);
-        }else {
+            return redirect('/admin' . $page[1] . '?' . $show_category);
+        } else {
             $fields_string = "?fields=";
             foreach ($fields as $field) {
                 $fields_string = $fields_string . $field . ",";
@@ -138,7 +131,7 @@ class AdminController extends Controller
             $fields_string = substr($fields_string, 0, -1);
             $url = explode('?', url()->previous());
             $page = explode('/admin', $url[0]);
-            return redirect('/admin' . $page[1] . $fields_string.''.$show_category);
+            return redirect('/admin' . $page[1] . $fields_string . '' . $show_category);
         }
 
     }
