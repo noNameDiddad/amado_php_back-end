@@ -6,6 +6,7 @@ use App\Http\Requests\ProductRequest;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -94,12 +95,16 @@ class ProductController extends Controller
             $upload_folder = 'public/images';
             $filename = $file->getClientOriginalName();
 
-            Storage::putFileAs($upload_folder, $file, $filename);
+            if (Storage::exists("public/images/".$filename)) {
+                Storage::putFileAs($upload_folder, $file, $filename);
+            }
 
             $product->image_path = $filename;
         }
-        Log::info("Product was created id=".$product->id);
-        Log::info($product);
+        if (App::environment(['development','local'])) {
+            Log::info("Product was created id=".$product->id);
+            Log::info($product);
+        }
         $product->save();
         return redirect()->route('product.index');
 
@@ -152,6 +157,10 @@ class ProductController extends Controller
 
             $product->image_path = $filename;
         }
+        if (App::environment(['development','local'])) {
+            Log::info("Product was updated id=".$product->id);
+            Log::info($product);
+        }
         $product->update();
 
         return redirect()->route('product.index');
@@ -167,8 +176,10 @@ class ProductController extends Controller
     {
         cache()->forget('product.index.without-filter');
         cache()->forget('product.main_pag');
-        Log::info("Product was deleted id=".$product->id);
-        Log::info($product);
+        if (App::environment(['development','local'])) {
+            Log::info("Product was deleted id=".$product->id);
+            Log::info($product);
+        }
         $product->delete();
 
         return redirect()->back();
