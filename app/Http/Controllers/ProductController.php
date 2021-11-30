@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductRequest;
 use App\Models\Category;
 use App\Models\Product;
+use App\Policies\ProductPolicy;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -30,9 +33,7 @@ class ProductController extends Controller
         if (isset($request->max_price) || isset($request->category)) {
             $products = $this->filter($request, $isDesc, $sort_by);
         } else {
-            $products = cache()->remember('product.index.without-filter', 60*60, function () {
-                return Product::with('categories')->paginate(9);
-            });
+            $products = Product::with('categories')->paginate(9);
         }
         return view('production.index', compact(
             'products',
@@ -48,20 +49,13 @@ class ProductController extends Controller
     {
         $max_price = $request->max_price;
         $category = $request->category;
-
-        if ($category == null) {
-            $products = Product::with('categories')
-                ->where('price', '<', $max_price)
-                ->orderBy($sort_by,$isDesc)
-                ->paginate(9);
-        } else {
-            $products = Product::with('categories')
-                ->where('category_id', $category)
-                ->where('price', '<', $max_price)
-                ->orderBy($sort_by,$isDesc)
-                ->paginate(9);
+        $products = Product::with('categories')
+            ->where('price', '<', $max_price)
+            ->orderBy($sort_by, $isDesc);
+        if ($category !== null) {
+            $products = $products->where('category_id', $category);
         }
-        return $products;
+        return $products->paginate(9);
     }
 
     /**
@@ -71,6 +65,7 @@ class ProductController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Product::class);
         $categories = Category::all();
         return view('production.create', ['categories' => $categories]);
     }
@@ -83,6 +78,10 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
+        $this->authorize('create', Product::class);
+        cache()->forget('product.index.without-filter');
+        cache()->forget('product.main_pag');
+
         $product = new Product();
 
         $product->product = $request->product;
@@ -95,14 +94,14 @@ class ProductController extends Controller
             $upload_folder = 'public/images';
             $filename = $file->getClientOriginalName();
 
-            if (Storage::exists("public/images/".$filename)) {
+            if (Storage::exists("public/images/" . $filename)) {
                 Storage::putFileAs($upload_folder, $file, $filename);
             }
 
             $product->image_path = $filename;
         }
-        if (App::environment(['development','local'])) {
-            Log::info("Product was created id=".$product->id);
+        if (App::environment(['development', 'local'])) {
+            Log::info("Product was created id=" . $product->id);
             Log::info($product);
         }
         $product->save();
@@ -130,6 +129,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
+        $this->authorize('update', $product);
         $categories = Category::all();
         return view('production.edit', ['categories' => $categories, 'product' => $product]);
     }
@@ -143,6 +143,11 @@ class ProductController extends Controller
      */
     public function update(ProductRequest $request, Product $product)
     {
+        $this->authorize('update', $product);
+
+        cache()->forget('product.index.without-filter');
+        cache()->forget('product.main_pag');
+
         $product->product = $request->product;
         $product->description = $request->description;
         $product->number = $request->number;
@@ -157,8 +162,8 @@ class ProductController extends Controller
 
             $product->image_path = $filename;
         }
-        if (App::environment(['development','local'])) {
-            Log::info("Product was updated id=".$product->id);
+        if (App::environment(['development', 'local'])) {
+            Log::info("Product was updated id=" . $product->id);
             Log::info($product);
         }
         $product->update();
@@ -174,10 +179,11 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        $this->authorize('delete', $product);
         cache()->forget('product.index.without-filter');
         cache()->forget('product.main_pag');
-        if (App::environment(['development','local'])) {
-            Log::info("Product was deleted id=".$product->id);
+        if (App::environment(['development', 'local'])) {
+            Log::info("Product was deleted id=" . $product->id);
             Log::info($product);
         }
         $product->delete();
