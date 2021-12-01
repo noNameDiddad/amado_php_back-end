@@ -30,7 +30,7 @@ class AdminController extends Controller
                 $data_table = User::select($get_fields)->paginate(20);
                 $data_table = $data_table->appends(['fields' => $data['fields']]);
             } catch (\Throwable $throwable) {
-                return response('Доступ с вашими правами запрещён', Response::HTTP_BAD_REQUEST);
+                abort(Response::HTTP_BAD_REQUEST);
             }
         } else {
             $data_table = User::paginate(20);
@@ -58,7 +58,7 @@ class AdminController extends Controller
                 $data_table = Category::select($get_fields)->paginate(20);
                 $data_table = $data_table->appends(['fields' => $data['fields']]);
             } catch (\Throwable $throwable) {
-                return response('Доступ с вашими правами запрещён', Response::HTTP_BAD_REQUEST);
+                abort(Response::HTTP_BAD_REQUEST);
             }
         } else {
             $data_table = Category::paginate(20);
@@ -87,7 +87,7 @@ class AdminController extends Controller
                 if (isset($data['expand']))
                     $data_table = $data_table->appends(['expand' => $data['expand']]);
             } catch (\Throwable $throwable) {
-                return response('Доступ с вашими правами запрещён', Response::HTTP_BAD_REQUEST);
+                abort(Response::HTTP_BAD_REQUEST);
             }
         } else {
             $data_table = Product::paginate(20);
