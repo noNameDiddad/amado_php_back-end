@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+
+
+Route::prefix('user')->middleware('auth:sanctum')->group(function () {
+    Route::get('/token', [ApiController::class, 'createToken'])->name('createToken');
+    Route::get('/', function (Request $request) {
+        return $request->user();
+    });
+});
+
+Route::prefix('product')->middleware('auth:sanctum')->group(function () {
+    Route::get('/all', [ApiController::class, 'getProductsAll'])->name('getProductsAll');
+    Route::get('/news', [ApiController::class, 'getProductsNews'])->name('getProductsNews');
 });
