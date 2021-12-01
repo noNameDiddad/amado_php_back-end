@@ -29,7 +29,8 @@ class ProductController extends Controller
         if (isset($request->sort_by)) {
             $sort_by = $request->sort_by;
         }
-        $categories = Category::all();
+
+        $categories = Category::cacheAll();
         if (isset($request->max_price) || isset($request->category)) {
             $products = $this->filter($request, $isDesc, $sort_by);
         } else {
@@ -66,8 +67,8 @@ class ProductController extends Controller
     public function create()
     {
         $this->authorize('create', Product::class);
-        $category = Category::all();
-        return view('production.create', compact('category'));
+        $categories = Category::cacheAll();
+        return view('production.create', compact('categories'));
     }
 
     /**
@@ -117,8 +118,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        $categories = Category::all();
-        return view('production.show', ['categories' => $categories, 'product' => $product]);
+        return view('production.show', compact('product'));
     }
 
     /**
@@ -130,7 +130,7 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         $this->authorize('update', $product);
-        $categories = Category::all();
+        $categories = Category::cacheAll();
         return view('production.edit', ['categories' => $categories, 'product' => $product]);
     }
 

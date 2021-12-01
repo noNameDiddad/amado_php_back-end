@@ -17,7 +17,7 @@
                 <div class="col-md-6">
                     <div class="h-100 p-5 bg-light border rounded-3">
                         <h1 class="card-text"><b>{{$product->product}}</b></h1>
-                        <p class="card-text"><b>Category:</b> {{$product->categories->category}}</p>
+                        <p class="card-text"><b>Category:</b> {{$product->category->category}}</p>
                         <p class="card-text text-decoration-underline">{{$product->price}} руб.</p>
                         <p class="card-text">{{$product->description}}</p>
                         <a href="{{ url()->previous() }}">

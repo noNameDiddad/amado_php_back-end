@@ -16,4 +16,11 @@ class Category extends Model
     protected $hidden  = [
         'updated_at',
     ];
+
+    public static function cacheAll()
+    {
+        return cache()->remember('product.main_page', 60*60*24, function () {
+            return self::all();
+        });
+    }
 }
