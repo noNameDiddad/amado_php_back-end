@@ -26,14 +26,14 @@
                                         Placeholder</title>
                                     <rect width="100%" height="100%" fill="#55595c"></rect>
                                     <text x="50%" y="50%" fill="#eceeef"
-                                          dy=".3em">{{$purchase->products->product}}</text>
+                                          dy=".3em">{{$purchase->product}}</text>
                                 </svg>
                                 <div class="card-body">
-                                    <p class="card-text">{{mb_strimwidth($purchase->products->description,0,150, '...')}}</p>
+                                    <p class="card-text">{{mb_strimwidth($purchase->description,0,150, '...')}}</p>
                                     <p class="card-text">
-                                        <b>Category:</b> {{$purchase->products->categories->category}}
+                                        <b>Category:</b> {{$purchase->category->category}}
                                     </p>
-                                    <p class="card-text text-decoration-underline">{{$purchase->products->price}}
+                                    <p class="card-text text-decoration-underline">{{$purchase->price}}
                                         руб.</p>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="btn-group row">

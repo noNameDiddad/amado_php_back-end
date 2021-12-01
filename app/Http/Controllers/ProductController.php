@@ -33,7 +33,7 @@ class ProductController extends Controller
         if (isset($request->max_price) || isset($request->category)) {
             $products = $this->filter($request, $isDesc, $sort_by);
         } else {
-            $products = Product::with('categories')->paginate(9);
+            $products = Product::with('category')->paginate(9);
         }
         return view('production.index', compact(
             'products',
@@ -49,7 +49,7 @@ class ProductController extends Controller
     {
         $max_price = $request->max_price;
         $category = $request->category;
-        $products = Product::with('categories')
+        $products = Product::with('category')
             ->where('price', '<', $max_price)
             ->orderBy($sort_by, $isDesc);
         if ($category !== null) {
@@ -66,8 +66,8 @@ class ProductController extends Controller
     public function create()
     {
         $this->authorize('create', Product::class);
-        $categories = Category::all();
-        return view('production.create', ['categories' => $categories]);
+        $category = Category::all();
+        return view('production.create', compact('category'));
     }
 
     /**

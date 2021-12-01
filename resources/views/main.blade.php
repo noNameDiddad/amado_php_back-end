@@ -37,7 +37,7 @@
                                 <div class="card-body">
                                     <h2 class="card-text">{{$product->product}}</h2>
                                     <p class="card-text">{{mb_strimwidth($product->description,0,150, '...')}}</p>
-                                    <p class="card-text"><b>Category:</b> {{$product->categories->category}}</p>
+                                    <p class="card-text"><b>Category:</b> {{$product->category->category}}</p>
                                     <p class="card-text text-decoration-underline">{{$product->price}}$</p>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="btn-group row">

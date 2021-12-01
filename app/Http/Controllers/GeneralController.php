@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\User;
 use App\Models\UserProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +18,7 @@ class GeneralController extends Controller
     }
 
     public function getPersonaData() {
-        $purchases = UserProduct::where('user_id', Auth::id())->get();
+        $purchases = User::find(1)->products()->get();
         return view('user.persona', compact('purchases'));
     }
 }
