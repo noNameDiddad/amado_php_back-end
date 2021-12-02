@@ -18,6 +18,13 @@
         </section>
         <div class="album py-5 bg-light">
             <div class="container">
+                <div class="text-center">
+                    <a href="{{ route('product.index') }}">
+                        <button type="button" class="btn btn-outline-secondary mb-5">
+                            <h2>To productions</h2>
+                        </button>
+                    </a>
+                </div>
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                     @foreach($products as $product)
                         <div class="col">
@@ -52,13 +59,6 @@
                             </div>
                         </div>
                     @endforeach
-                </div>
-                <div class="text-center">
-                    <a href="{{ route('product.index') }}">
-                        <button type="button" class="btn btn-outline-secondary mt-5">
-                            <h2>To productions</h2>
-                        </button>
-                    </a>
                 </div>
             </div>
         </div>

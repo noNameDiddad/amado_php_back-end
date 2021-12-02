@@ -28,11 +28,11 @@ Route::middleware('auth')->group(function () {
     Route::get('admin/product', [AdminController::class, 'showProduct'])->name('admin.product');
     Route::post('admin', [AdminController::class, 'setFields'])->name('set-fields');
 
-    Route::resource('product', ProductController::class);
-
-    Route::post('product', [ProductController::class, 'index'])->name('set-filter');
     Route::post('product/store', [ProductController::class, 'store'])->name('product.store');
 });
+
+Route::resource('product', ProductController::class);
+Route::post('product', [ProductController::class, 'index'])->name('set-filter');
 
 Route::get('/register', [AuthController::class, 'sign_up',])->name('sign_up');
 Route::post('/register', [AuthController::class, 'register',])->name('register');

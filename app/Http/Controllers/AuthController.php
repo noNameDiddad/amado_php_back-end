@@ -13,7 +13,8 @@ class AuthController extends Controller
 {
     public function sign_in()
     {
-        return view('auth.login');
+        $message = session()->get('message');
+        return view('auth.login',compact('message'));
     }
 
     public function login(LoginRequest $request)
@@ -25,9 +26,10 @@ class AuthController extends Controller
         }
 
         if (Auth::attempt($request->only(['email', 'password'], $remember))) {
-            return redirect()->route('persona');
+            return redirect()->route('main');
+        } else {
+            return redirect()->route('login')->with('message', 'Неверный логин или пароль');
         }
-        return redirect()->route('login');
     }
 
     public function sign_up()

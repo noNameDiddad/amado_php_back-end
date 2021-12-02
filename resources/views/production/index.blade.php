@@ -109,17 +109,17 @@
                     </a>
 
                 </div>
-
-
                 {{--end filter--}}
-
-
             </div>
         </section>
         <section class="py-2 text-center bg-light">
-            <a href="{{ route('product.create') }}">
-                <button class="btn btn-outline-dark mt-5 w-25">Add product</button>
-            </a>
+            @if(Auth::check())
+                @if(Auth::user()->role == '1')
+                    <a href="{{ route('product.create') }}">
+                        <button class="btn btn-outline-dark mt-5 w-25">Add product</button>
+                    </a>
+                @endif
+            @endif
         </section>
         <div class="album py-5 bg-light">
             <div class="container">
@@ -156,23 +156,23 @@
                                                     <button class="btn btn-outline-secondary ">More</button>
                                                 </a>
                                             </div>
+                                            @if(Auth::check())
+                                                @if(Auth::user()->role == '1')
+                                                    <div class="col-4">
+                                                        <a href="{{ route('product.edit', $product) }}">
+                                                            <button class="btn btn-outline-info ">Edit</button>
+                                                        </a>
+                                                    </div>
 
-                                            @if(Auth::user()->role == '1')
-                                                <div class="col-4">
-                                                    <a href="{{ route('product.edit', $product) }}">
-                                                        <button class="btn btn-outline-info ">Edit</button>
-                                                    </a>
-                                                </div>
-
-                                                <div class="col-4">
-                                                    <form action="{{ route('product.destroy', $product->id) }}"
-                                                          method="POST">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button class="btn btn-outline-danger">Delete</button>
-                                                    </form>
-                                                </div>
-
+                                                    <div class="col-4">
+                                                        <form action="{{ route('product.destroy', $product->id) }}"
+                                                              method="POST">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button class="btn btn-outline-danger">Delete</button>
+                                                        </form>
+                                                    </div>
+                                                @endif
                                             @endif
                                         </div>
                                     </div>

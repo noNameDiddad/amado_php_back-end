@@ -19,7 +19,7 @@ class Category extends Model
 
     public static function cacheAll()
     {
-        return cache()->remember('product.main_page', 60*60*24, function () {
+        return cache()->remember('category.all', 60*60*24, function () {
             return self::all();
         });
     }
