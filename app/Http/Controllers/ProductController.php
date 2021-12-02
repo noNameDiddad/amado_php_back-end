@@ -34,7 +34,7 @@ class ProductController extends Controller
         if (isset($request->max_price) || isset($request->category)) {
             $products = $this->filter($request, $isDesc, $sort_by);
         } else {
-            $products = Product::with('category')->paginate(9);
+            $products = Product::with('category')->orderBy('id', 'desc')->paginate(9);
         }
         return view('production.index', compact(
             'products',
@@ -93,13 +93,9 @@ class ProductController extends Controller
 
         if ($file = $request->file('image')) {
             $upload_folder = 'public/images';
-            $filename = $file->getClientOriginalName();
-
-            if (Storage::exists("public/images/" . $filename)) {
-                Storage::putFileAs($upload_folder, $file, $filename);
-            }
-
-            $product->image_path = $filename;
+            $path = $file->store($upload_folder);
+            $name = str_replace($upload_folder."/", '',$path);
+            $product->image_path = $name;
         }
         if (App::environment(['development', 'local'])) {
             Log::info("Product was created id=" . $product->id);
@@ -178,6 +174,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+
         $this->authorize('delete', $product);
         cache()->forget('product.index.without-filter');
         cache()->forget('product.main_pag');
@@ -185,7 +182,9 @@ class ProductController extends Controller
             Log::info("Product was deleted id=" . $product->id);
             Log::info($product);
         }
+        $file = $product->image_path;
         $product->delete();
+        Storage::delete("public/images/".$file);
 
         return redirect()->back();
     }
