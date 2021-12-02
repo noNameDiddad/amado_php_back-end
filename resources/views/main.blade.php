@@ -42,7 +42,7 @@
                                     </svg>
                                 @endif
                                 <div class="card-body">
-                                    <h2 class="card-text">{{$product->product}}</h2>
+                                    <h2 class="card-text">{{mb_strimwidth($product->product,0,18, '...')}}</h2>
                                     <p class="card-text">{{mb_strimwidth($product->description,0,150, '...')}}</p>
                                     <p class="card-text"><b>Category:</b> {{$product->category->category}}</p>
                                     <p class="card-text text-decoration-underline">{{$product->price}}$</p>
