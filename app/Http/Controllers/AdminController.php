@@ -13,8 +13,6 @@ class AdminController extends Controller
 {
     public function showAdmin()
     {
-        if (Auth::user()->role != 1)
-            abort(Response::HTTP_FORBIDDEN);
         return view('admin.index');
     }
 

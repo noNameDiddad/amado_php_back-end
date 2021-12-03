@@ -22,13 +22,14 @@ Route::get('/', [GeneralController::class, 'showProduct',])->name('main');
 Route::middleware('auth')->group(function () {
     Route::get('/persona', [GeneralController::class, 'getPersonaData'])->name('persona');
 
-    Route::get('admin', [AdminController::class, 'showAdmin'])->name('admin');
-    Route::get('admin/user', [AdminController::class, 'showUsers'])->name('admin.user');
-    Route::get('admin/category', [AdminController::class, 'showCategory'])->name('admin.category');
-    Route::get('admin/product', [AdminController::class, 'showProduct'])->name('admin.product');
-    Route::post('admin', [AdminController::class, 'setFields'])->name('set-fields');
-
-    Route::post('product/store', [ProductController::class, 'store'])->name('product.store');
+    Route::prefix('admin')->middleware('can:is-admin,\App\Models\User')->group(function () {
+        Route::get('/', [AdminController::class, 'showAdmin'])->name('admin');
+        Route::get('user', [AdminController::class, 'showUsers'])->name('admin.user');
+        Route::get('category', [AdminController::class, 'showCategory'])->name('admin.category');
+        Route::get('product', [AdminController::class, 'showProduct'])->name('admin.product');
+        Route::post('/', [AdminController::class, 'setFields'])->name('set-fields');
+    });
+    Route::post('product/store', [ProductController::class, 'store'])->name('product.store')->middleware('can:is-admin,\App\Models\User');
 });
 
 Route::resource('product', ProductController::class);

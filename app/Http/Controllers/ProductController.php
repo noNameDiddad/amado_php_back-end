@@ -81,7 +81,6 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
-        $this->authorize('create', Product::class);
         cache()->forget('product.index.without-filter');
         cache()->forget('product.main_pag');
 
