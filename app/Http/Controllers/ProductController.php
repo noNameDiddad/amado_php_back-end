@@ -10,8 +10,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Faker\Generator as Faker;
 
 class ProductController extends Controller
 {
@@ -174,10 +176,8 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-
         $this->authorize('delete', $product);
-        cache()->forget('product.index.without-filter');
-        cache()->forget('product.main_pag');
+        cache()->flush();
         if (App::environment(['development', 'local'])) {
             Log::info("Product was deleted id=" . $product->id);
             Log::info($product);
