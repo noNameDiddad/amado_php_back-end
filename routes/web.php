@@ -30,6 +30,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/', [AdminController::class, 'setFields'])->name('set-fields');
     });
     Route::post('product/store', [ProductController::class, 'store'])->name('product.store')->middleware('can:is-admin,\App\Models\User');
+    Route::get('product/{id}/take', [ProductController::class, 'takeProduct'])->name('user_product_add');
 });
 
 Route::resource('product', ProductController::class);

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductRequest;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\User;
+use App\Models\UserProduct;
 use App\Policies\ProductPolicy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -115,6 +117,17 @@ class ProductController extends Controller
     public function show(Product $product)
     {
         return view('production.show', compact('product'));
+    }
+
+    public function takeProduct(Request $request, $product_id)
+    {
+        $user_product = new UserProduct();
+
+        $user_product->user_id = $request->user()->id;
+        $user_product->product_id = $product_id;
+
+        $user_product->save();
+        return redirect()->back();
     }
 
     /**

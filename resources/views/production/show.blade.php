@@ -23,6 +23,13 @@
                         <a href="{{ url()->previous() }}">
                             <button class="btn btn-outline-secondary" type="button">Back</button>
                         </a>
+                        @if(Auth::check())
+                            <div class="col-4">
+                                <a href="{{ route('user_product_add', $product->id) }}">
+                                    <button class="btn btn-outline-info ">Take yourself</button>
+                                </a>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
