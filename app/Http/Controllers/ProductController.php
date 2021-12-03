@@ -176,7 +176,8 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         $this->authorize('delete', $product);
-        cache()->flush();
+        cache()->forget('product.index.without-filter');
+        cache()->forget('product.main_page');
         if (App::environment(['development', 'local'])) {
             Log::info("Product was deleted id=" . $product->id);
             Log::info($product);
