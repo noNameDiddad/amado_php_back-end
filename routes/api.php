@@ -16,9 +16,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 
+Route::get('/register', [ApiController::class, 'registerToken'])->name('registerToken');
 
 Route::prefix('user')->middleware('auth:sanctum')->group(function () {
-    Route::get('/token', [ApiController::class, 'createToken'])->name('createToken');
     Route::get('/', function (Request $request) {
         return $request->user();
     });
