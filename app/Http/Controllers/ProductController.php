@@ -84,28 +84,22 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
-        cache()->forget('product.index.without-filter');
-        cache()->forget('product.main_pag');
-
-        $product = new Product();
-
-        $product->product = $request->product;
-        $product->description = $request->description;
-        $product->number = $request->number;
-        $product->price = $request->price;
-        $product->category_id = $request->category_id;
+        $this->cacheForget();
 
         if ($file = $request->file('image')) {
             $upload_folder = 'public/images';
             $path = $file->store($upload_folder);
-            $name = str_replace($upload_folder."/", '',$path);
-            $product->image_path = $name;
+            $name = str_replace($upload_folder . "/", '', $path);
+            $request->merge(['image_path' => $name]);
         }
+
+        $product = Product::create($request->all());
+
         if (App::environment(['development', 'local'])) {
             Log::info("Product was created id=" . $product->id);
             Log::info($product);
         }
-        $product->save();
+
         return redirect()->route('product.index');
     }
 
@@ -131,7 +125,7 @@ class ProductController extends Controller
         $user = $request->user();
 
         $product = Product::where('id', $user_product->product_id)->first();
-        $user->notify( new PictureAdded($user, $product));
+        $user->notify(new PictureAdded($user, $product));
 
         return redirect()->back();
     }
@@ -160,14 +154,7 @@ class ProductController extends Controller
     {
         $this->authorize('update', $product);
 
-        cache()->forget('product.index.without-filter');
-        cache()->forget('product.main_pag');
-
-        $product->product = $request->product;
-        $product->description = $request->description;
-        $product->number = $request->number;
-        $product->price = $request->price;
-        $product->category_id = $request->category_id;
+        $this->cacheForget();
 
         if ($file = $request->file('image')) {
             $upload_folder = 'public/images';
@@ -195,16 +182,21 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         $this->authorize('delete', $product);
-        cache()->forget('product.index.without-filter');
-        cache()->forget('product.main_page');
+        $this->cacheForget();
         if (App::environment(['development', 'local'])) {
             Log::info("Product was deleted id=" . $product->id);
             Log::info($product);
         }
         $file = $product->image_path;
         $product->delete();
-        Storage::delete("public/images/".$file);
+        Storage::delete("public/images/" . $file);
 
         return redirect()->back();
+    }
+
+    public function cacheForget()
+    {
+        cache()->forget('product.index.without-filter');
+        cache()->forget('product.main_page');
     }
 }
