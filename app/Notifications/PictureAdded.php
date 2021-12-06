@@ -2,11 +2,7 @@
 
 namespace App\Notifications;
 
-use App\Models\Product;
-use App\Models\User;
-use App\Models\UserProduct;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -14,7 +10,8 @@ class PictureAdded extends Notification
 {
     use Queueable;
 
-    private $user_product;
+    private $product;
+    private $user;
 
 
     /**
@@ -22,9 +19,10 @@ class PictureAdded extends Notification
      *
      * @return void
      */
-    public function __construct($user_product)
+    public function __construct($user, $product)
     {
-        $this->user_product = $user_product;
+        $this->product = $product;
+        $this->user = $user;
     }
 
     /**
@@ -60,16 +58,12 @@ class PictureAdded extends Notification
      */
     public function toArray($notifiable)
     {
-        $info_about_product = UserProduct::where('id', $this->user_product->id)->first();
-        $product = Product::where('id', $info_about_product->product_id)->first();
-        $user = User::where('id', $info_about_product->user_id)->first();
-
         return [
-            'painter' => $product->product,
-            'number' => $product->number,
+            'painter' => $this->product->product,
+            'number' => $this->product->number,
             'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
+                'id' => $this->user->id,
+                'name' => $this->user->name,
             ],
         ];
     }

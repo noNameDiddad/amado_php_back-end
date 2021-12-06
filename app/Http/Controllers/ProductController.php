@@ -129,7 +129,9 @@ class ProductController extends Controller
 
         $user_product->save();
         $user = $request->user();
-        $user->notify( new PictureAdded($user_product));
+
+        $product = Product::where('id', $user_product->product_id)->first();
+        $user->notify( new PictureAdded($user, $product));
 
         return redirect()->back();
     }

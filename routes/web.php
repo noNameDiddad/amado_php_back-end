@@ -25,6 +25,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('admin')->middleware('can:is-admin,\App\Models\User')->group(function () {
         Route::get('/', [AdminController::class, 'showAdmin'])->name('admin');
         Route::post('/', [AdminController::class, 'readNotification'])->name('readNotification');
+        Route::post('/delete_notification', [AdminController::class, 'deleteNotification'])->name('deleteNotification');
         Route::get('user', [AdminController::class, 'showUsers'])->name('admin.user');
         Route::get('category', [AdminController::class, 'showCategory'])->name('admin.category');
         Route::get('product', [AdminController::class, 'showProduct'])->name('admin.product');

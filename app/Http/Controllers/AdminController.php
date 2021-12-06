@@ -5,16 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\User;
+use App\NotificationItems\PictureAddedNotifications;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class AdminController extends Controller
 {
-    public function showAdmin()
+    public function showAdmin(PictureAddedNotifications $pictureAddedNotifications)
     {
-        $users = User::all();
-        return view('admin.index', compact('users'));
+        $unreadNotifications = $pictureAddedNotifications->unreadNotifications();
+        $withoutUnreadNotifications = $pictureAddedNotifications->withoutUnreadNotifications();
+        return view('admin.index', compact('unreadNotifications','withoutUnreadNotifications'));
     }
 
     public function readNotification(Request $request)
@@ -28,6 +30,19 @@ class AdminController extends Controller
             }
         }
 
+        return redirect()->back();
+    }
+
+    public function deleteNotification(Request $request)
+    {
+        $users = User::all();
+        foreach ($users as $user) {
+            foreach ($user->notifications as $notification) {
+                if ($notification->id == $request->notification) {
+                    $notification->delete();
+                }
+            }
+        }
         return redirect()->back();
     }
 
