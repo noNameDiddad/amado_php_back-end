@@ -24,10 +24,11 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('admin')->middleware('can:is-admin,\App\Models\User')->group(function () {
         Route::get('/', [AdminController::class, 'showAdmin'])->name('admin');
+        Route::post('/', [AdminController::class, 'readNotification'])->name('readNotification');
         Route::get('user', [AdminController::class, 'showUsers'])->name('admin.user');
         Route::get('category', [AdminController::class, 'showCategory'])->name('admin.category');
         Route::get('product', [AdminController::class, 'showProduct'])->name('admin.product');
-        Route::post('/', [AdminController::class, 'setFields'])->name('set-fields');
+        Route::post('/fields', [AdminController::class, 'setFields'])->name('set-fields');
     });
     Route::post('product/store', [ProductController::class, 'store'])->name('product.store')->middleware('can:is-admin,\App\Models\User');
     Route::get('product/{id}/take', [ProductController::class, 'takeProduct'])->name('user_product_add');

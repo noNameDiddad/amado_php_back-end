@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\User;
 use App\Models\UserProduct;
+use App\Notifications\PictureAdded;
 use App\Policies\ProductPolicy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -127,6 +128,9 @@ class ProductController extends Controller
         $user_product->product_id = $product_id;
 
         $user_product->save();
+        $user = $request->user();
+        $user->notify( new PictureAdded($user_product));
+
         return redirect()->back();
     }
 

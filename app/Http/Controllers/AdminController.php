@@ -13,7 +13,22 @@ class AdminController extends Controller
 {
     public function showAdmin()
     {
-        return view('admin.index');
+        $users = User::all();
+        return view('admin.index', compact('users'));
+    }
+
+    public function readNotification(Request $request)
+    {
+        $users = User::all();
+        foreach ($users as $user) {
+            foreach ($user->unreadNotifications as $notification) {
+                if ($notification->id == $request->notification) {
+                    $notification->markAsRead();
+                }
+            }
+        }
+
+        return redirect()->back();
     }
 
     public function showUsers(Request $request)
