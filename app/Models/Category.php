@@ -17,10 +17,5 @@ class Category extends Model
         'updated_at',
     ];
 
-    public static function cacheAll()
-    {
-        return cache()->remember('category.all', 60*60*24, function () {
-            return self::all();
-        });
-    }
+
 }

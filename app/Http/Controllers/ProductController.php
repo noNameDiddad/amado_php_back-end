@@ -2,21 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Cache\Cache;
 use App\Http\Requests\ProductRequest;
-use App\Models\Category;
 use App\Models\Product;
-use App\Models\User;
 use App\Models\UserProduct;
 use App\Notifications\PictureAdded;
-use App\Policies\ProductPolicy;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Faker\Generator as Faker;
 
 class ProductController extends Controller
 {
@@ -25,8 +19,9 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request, Cache $cache)
     {
+        $categories = $cache->cacheCategoryAll();
         $max_price = $request->max_price;
         $category_id = $request->category;
         $isDesc = $request->desc;
@@ -35,12 +30,12 @@ class ProductController extends Controller
             $sort_by = $request->sort_by;
         }
 
-        $categories = Category::cacheAll();
         if (isset($request->max_price) || isset($request->category)) {
             $products = $this->filter($request, $isDesc, $sort_by);
         } else {
             $products = Product::with('category')->orderBy('id', 'desc')->paginate(9);
         }
+
         return view('production.index', compact(
             'products',
             'categories',
@@ -69,10 +64,10 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Cache $cache)
     {
         $this->authorize('create', Product::class);
-        $categories = Category::cacheAll();
+        $categories = $cache->cacheCategoryAll();
         return view('production.create', compact('categories'));
     }
 
@@ -82,9 +77,9 @@ class ProductController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ProductRequest $request)
+    public function store(ProductRequest $request, Cache $cache)
     {
-        $this->cacheForget();
+        $cache->cacheForget();
 
         if ($file = $request->file('image')) {
             $upload_folder = 'public/images';
@@ -136,10 +131,10 @@ class ProductController extends Controller
      * @param \App\Models\Product $product
      * @return \Illuminate\Http\Response
      */
-    public function edit(Product $product)
+    public function edit(Product $product, Cache $cache)
     {
         $this->authorize('update', $product);
-        $categories = Category::cacheAll();
+        $categories = $cache->cacheCategoryAll();
         return view('production.edit', ['categories' => $categories, 'product' => $product]);
     }
 
@@ -150,11 +145,11 @@ class ProductController extends Controller
      * @param \App\Models\Product $product
      * @return \Illuminate\Http\Response
      */
-    public function update(ProductRequest $request, Product $product)
+    public function update(ProductRequest $request, Product $product,  Cache $cache)
     {
         $this->authorize('update', $product);
 
-        $this->cacheForget();
+        $cache->cacheForgetAll();
 
         if ($file = $request->file('image')) {
             $upload_folder = 'public/images';
@@ -179,10 +174,10 @@ class ProductController extends Controller
      * @param \App\Models\Product $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
+    public function destroy(Product $product, Cache $cache)
     {
         $this->authorize('delete', $product);
-        $this->cacheForget();
+        $cache->cacheForgetAll();
         if (App::environment(['development', 'local'])) {
             Log::info("Product was deleted id=" . $product->id);
             Log::info($product);
@@ -194,9 +189,5 @@ class ProductController extends Controller
         return redirect()->back();
     }
 
-    public function cacheForget()
-    {
-        cache()->forget('product.index.without-filter');
-        cache()->forget('product.main_page');
-    }
+
 }

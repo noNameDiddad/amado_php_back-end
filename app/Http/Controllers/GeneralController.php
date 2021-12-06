@@ -2,18 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
+use App\Cache\Cache;
 use App\Models\User;
-use App\Models\UserProduct;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-
 class GeneralController extends Controller
 {
-    public function showProduct() {
-        $products = cache()->remember('product.main_page', 60*60, function () {
-            return Product::orderBy('id','desc')->take(12)->get();
-        });
+    public function showProduct(Cache $cache) {
+        $products = $cache->cacheProductOrderByDesc();
         return view('main', compact('products'));
     }
 
